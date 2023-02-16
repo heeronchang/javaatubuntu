@@ -1,19 +1,20 @@
 package com.heeron.example.javaatubuntu.graph;
 
 import com.heeron.example.javaatubuntu.bag.Bag;
+import com.heeron.example.javaatubuntu.dto.Person;
 
 @SuppressWarnings("unchecked")
 public class Digraph {
   private final int V; // 顶点总数
   private int E; // 边总数
-  private Bag<Integer>[] adj; // [邻接表]顶点为数组下标，值为当前下标为顶点值所连通的顶点
+  private Bag<Person>[] adj; // [邻接表]顶点为数组下标，值为当前下标为顶点值所连通的顶点
 
   public Digraph(int V) {
     this.V = V;
     this.E = 0;
     adj = new Bag[V];
     for (int i = 0; i < V; i++) {
-      adj[i] = new Bag<Integer>();
+      adj[i] = new Bag<Person>();
     }
   }
 
@@ -30,7 +31,7 @@ public class Digraph {
    * @param v 顶点
    * @return 顶点的连通顶点集合Bag
    */
-  public Iterable<Integer> adj(int v) {
+  public Iterable<Person> adj(Person v) {
     return adj[v];
   }
 
@@ -46,7 +47,7 @@ public class Digraph {
   public Digraph reverse() {
     Digraph r = new Digraph(V);
     for (int v = 0; v < V; v++) {
-      for (int w : adj[v]) {
+      for (Person w : adj[v]) {
         r.addEdge(w, v);
       }
     }
@@ -60,7 +61,7 @@ public class Digraph {
     String s = V + " vertices, " + E + " edges\n";
     for (int v = 0; v < V; v++) {
       s += v + ": ";
-      for (int w : this.adj(v)) {
+      for (Person w : this.adj(v)) {
         s += w + " ";
       }
       s += "\n";
