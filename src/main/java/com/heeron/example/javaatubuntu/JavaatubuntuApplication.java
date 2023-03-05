@@ -1,5 +1,8 @@
 package com.heeron.example.javaatubuntu;
 
+import java.util.ArrayList;
+
+import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.stdDSA;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,17 +11,56 @@ import com.heeron.example.dto.Person;
 import com.heeron.example.javaatubuntu.bag.Bag;
 import com.heeron.example.javaatubuntu.graph.Digraph;
 import com.heeron.example.javaatubuntu.graph.DigraphDFS;
+import com.heeron.example.merkel.Merkel;
+import com.heeron.example.merkel.Sm3Utils;
 
 @SuppressWarnings("unchecked")
 @SpringBootApplication
 public class JavaatubuntuApplication {
 
 	public static void main(String[] args) {
+		SpringApplication.run(JavaatubuntuApplication.class, args);
 		// test();
 		// test2();
 		// test3();
-		test4();
-		SpringApplication.run(JavaatubuntuApplication.class, args);
+		// test4();
+		// testSM3();
+		testMerkel();
+		System.out.println();
+		testMerkel2();
+	}
+
+	public static void testMerkel2() {
+		String e0 = Sm3Utils.encrypt("0");
+		String e1 = Sm3Utils.encrypt("1");
+		String e2 = Sm3Utils.encrypt("2");
+		String e3 = Sm3Utils.encrypt("3");
+		String e4 = Sm3Utils.encrypt("4");
+		String e01 = Sm3Utils.encrypt(e0+e1);
+		String e34 = Sm3Utils.encrypt(e3+e4);
+		String e234 = Sm3Utils.encrypt(e2 + e34);
+		String e01234 = Sm3Utils.encrypt(e01+e234);
+		System.out.println(e01234);
+	}
+
+	public static void testMerkel() {
+		ArrayList<String> arr = new ArrayList<>();
+		arr.add("0");
+		arr.add("1");
+		arr.add("2");
+		arr.add("3");
+		arr.add("4");
+
+		Merkel merkel = new Merkel(arr);
+		String hash = merkel.getMerkelHash();
+		System.out.println(hash);
+	}
+
+	public static void testSM3() {
+		String text = "0";
+		String encrypt = Sm3Utils.encrypt(text);
+		System.out.println("密文：" + encrypt);
+		System.out.println("验证结果：" + Sm3Utils.verify(text, encrypt));
 	}
 
 	public static void test() {
